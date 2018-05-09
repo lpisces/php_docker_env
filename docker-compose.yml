@@ -25,7 +25,7 @@ services:
 
 ### PHP-CLI Container #######################################
 
-    php-cli:
+    php_cli:
       build:
         context: ./php_cli
       volumes:
@@ -38,7 +38,7 @@ services:
 
 ### PHP-CLI_CRONTAB Container #######################################
 
-    php-cli_crontab:
+    php_cli_crontab:
       build:
         context: ./php_cli_crontab
       volumes:
@@ -51,7 +51,7 @@ services:
 
 ### PHP-CLI_WORKER Container #######################################
 
-    php-cli_worker:
+    php_cli_worker:
       build:
         context: ./php_cli_worker
       volumes:
@@ -82,8 +82,10 @@ services:
       image: mysql:5.7
       volumes:
         - ../data/mysql:/var/lib/mysql
-      ports:
-        - "${MYSQL_PORT}:3306"
+      expose:
+        - 3306
+#      ports:
+#        - "${MYSQL_PORT}:3306"
       environment:
         - MYSQL_ROOT_PASSWORD=123456
       restart: on-failure
@@ -104,8 +106,9 @@ services:
 
     redis:
       image: redis:3.2.11
-      ports:
-        - "${REDIS_PORT}:6379"
+      expose: 6379
+#      ports:
+#        - "${REDIS_PORT}:6379"
       volumes:
         - ../data/redis:/data
       restart: on-failure

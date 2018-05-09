@@ -22,3 +22,13 @@ Run follow command in this dir:
 ## Port info
 
 `cat .env`
+
+# Config
+
+## crontab
+
+Edit `php_cli_crontab/crontab`
+
+## worker
+
+Edit `php_cli_worker/worker.sh`

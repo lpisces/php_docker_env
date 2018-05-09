@@ -21,6 +21,7 @@ services:
       depends_on:
         - mysql
         - redis
+      restart: on-failure
 
 ### PHP-CLI Container #######################################
 
@@ -33,6 +34,7 @@ services:
         - mysql
         - redis
       tty: true
+      restart: on-failure
 
 ### PHP-CLI_CRONTAB Container #######################################
 
@@ -45,6 +47,7 @@ services:
         - mysql
         - redis
       tty: true
+      restart: on-failure
 
 ### PHP-CLI_WORKER Container #######################################
 
@@ -57,6 +60,7 @@ services:
         - mysql
         - redis
       tty: true
+      restart: on-failure
 
 ### Nginx Server Container ##################################
 
@@ -70,6 +74,7 @@ services:
           - "${NGINX_HTTPS_PORT}:443"
       depends_on:
           - php-fpm
+      restart: on-failure
 
 ### MySQL Container #########################################
 
@@ -81,6 +86,7 @@ services:
         - "${MYSQL_PORT}:3306"
       environment:
         - MYSQL_ROOT_PASSWORD=123456
+      restart: on-failure
 
 ### PHPMyAdmin Container #########################################
 
@@ -92,6 +98,7 @@ services:
           - mysql:db
       depends_on:
         - mysql
+      restart: on-failure
 
 ### Redis Container #########################################
 
@@ -101,6 +108,7 @@ services:
         - "${REDIS_PORT}:6379"
       volumes:
         - ../data/redis:/data
+      restart: on-failure
 
 ### Volumes Setup ###########################################
 

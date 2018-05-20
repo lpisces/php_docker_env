@@ -81,7 +81,8 @@ services:
     mysql:
       image: mysql:5.7
       volumes:
-        - ../data/mysql:/var/lib/mysql
+          #- ../data/mysql:/var/lib/mysql
+          - mysql_data:/var/lib/mysql
       expose:
         - 3306
 #      ports:

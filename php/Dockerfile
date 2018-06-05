@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:7.1.16-fpm
 
 ENV TZ=Asia/Shanghai
 

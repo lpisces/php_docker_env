@@ -15,7 +15,7 @@ services:
       build:
         context: ./php
       volumes:
-        - ../www:/var/www/html
+        - ${WEB_ROOT}:/var/www/html
       expose:
         - "9000"
       depends_on:
@@ -29,7 +29,7 @@ services:
       build:
         context: ./php_cli
       volumes:
-        - ../www:/var/www/html
+        - ${WEB_ROOT}:/var/www/html
       depends_on:
         - mysql
         - redis
@@ -42,7 +42,7 @@ services:
       build:
         context: ./php_cli_crontab
       volumes:
-        - {WEB_ROOT}:/var/www/html
+        - ${WEB_ROOT}:/var/www/html
       depends_on:
         - mysql
         - redis
@@ -55,7 +55,7 @@ services:
       build:
         context: ./php_cli_worker
       volumes:
-        - {WEB_ROOT}:/var/www/html
+        - ${WEB_ROOT}:/var/www/html
       depends_on:
         - mysql
         - redis
@@ -68,7 +68,7 @@ services:
       build:
         context: ./nginx
       volumes:
-          - ../www:/var/www/html
+          - ${WEB_ROOT}:/var/www/html
       ports:
           - "${NGINX_HTTP_PORT}:80"
           - "${NGINX_HTTPS_PORT}:443"

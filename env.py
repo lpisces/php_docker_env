@@ -38,4 +38,5 @@ for i in range(len(varArray)):
 
 #env_config.append("%s=%s" % ("USER_NETWORK", network_name))
 fd.write("%s=%s\n" % ("USER_NETWORK", network_name))
+fd.write("%s=%s\n" % ("WEB_ROOT", "../www"))
 fd.close()

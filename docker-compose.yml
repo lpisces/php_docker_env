@@ -42,7 +42,7 @@ services:
       build:
         context: ./php_cli_crontab
       volumes:
-        - ../www:/var/www/html
+        - {WEB_ROOT}:/var/www/html
       depends_on:
         - mysql
         - redis
@@ -55,7 +55,7 @@ services:
       build:
         context: ./php_cli_worker
       volumes:
-        - ../www:/var/www/html
+        - {WEB_ROOT}:/var/www/html
       depends_on:
         - mysql
         - redis

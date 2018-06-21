@@ -1,3 +1,3 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 docker-compose down

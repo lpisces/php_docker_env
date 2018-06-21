@@ -1,4 +1,4 @@
-FROM php:7.1.15-cli
+FROM php:7.1.16-cli
 
 ENV TZ=Asia/Shanghai
 
@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng12-dev \
+        git \
+        zip \
     && docker-php-ext-install -j$(nproc) iconv mcrypt mysqli pdo_mysql pcntl\
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
@@ -28,3 +30,5 @@ RUN apt install wget -y
 RUN wget https://getcomposer.org/download/1.6.5/composer.phar -O /usr/bin/composer
 
 RUN chmod +x /usr/bin/composer
+
+WORKDIR /var/www/html

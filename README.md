@@ -64,40 +64,50 @@ Edit `php_cli_worker/worker.sh`
 ## 如何执行composer install 或其他命令
 
 启动状态下,在当前目录下执行如下命令
+
 `docker-compose ps | grep php_cli`
 找到php_cli对应的容器(container)名称,类似`php_docker_env_php_cli_1`
 在此容器中执行`composer install`,指令如下
+
 `docker exec php_docker_env_php_cli_1 composer install`
 
 ## 如何进入容器(container)调试
 
 找到对应的容器(container)名称,方法见上.执行指令
+
 `docker exec -it php_docker_env_php_cli_1 bash`
 
 ## 如何访问mysql和redis
 
 mysql可以通过phpmyadmin访问,端口见上.
 程序中访问mysql
+
 `host`:`mysql`
 `port`:`3306`
 `username`:`root`
 `password`:`123456`(默认)
 
 程序中访问redis
+
 `host`:`redis`
 `port`:`6379`
 
 *注意*不要使用ip配置或访问,用`hostname`访问,在本项目中使用`mysql`,`redis`,`php_cli`,`nginx`等
 
 ## 如何设置开机启动
+
 在`/etc/rc.local`中配置命令
+
 `cd /path/to/this/dir && docker-compose up -d`
 
 ## 如何查看日志
+
 查看全部日志
+
 `docker-compose logs`
 
 查看单个容器(container)日志,示例如下
+
 `docker-compose logs mysql`
 
 ## 如何安装docker(centos7) 

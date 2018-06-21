@@ -66,7 +66,9 @@ Edit `php_cli_worker/worker.sh`
 启动状态下,在当前目录下执行如下命令
 
 `docker-compose ps | grep php_cli`
+
 找到php_cli对应的容器(container)名称,类似`php_docker_env_php_cli_1`
+
 在此容器中执行`composer install`,指令如下
 
 `docker exec php_docker_env_php_cli_1 composer install`

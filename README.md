@@ -2,6 +2,10 @@
 
 *使用前请确认安装docker和docker-compose*,如何安装见`常见问题`
 
+*以下配置假定当前目录为包含docker-compose.yml文件的同级目录*
+
+*laravel/lumen请使用master分支,ci请使用ci分支*
+
 ## Init 初始化
 
 Run follow command in this dir:

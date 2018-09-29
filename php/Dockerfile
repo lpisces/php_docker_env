@@ -1,4 +1,4 @@
-FROM php:7.1.16-fpm
+FROM php:5.4-fpm
 
 ENV TZ=Asia/Shanghai
 
@@ -8,19 +8,56 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
     echo "deb-src http://mirrors.163.com/debian/ jessie main non-free contrib" >>/etc/apt/sources.list && \
     echo "deb-src http://mirrors.163.com/debian/ jessie-proposed-updates main non-free contrib" >>/etc/apt/sources.list
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng12-dev \
+        libgmp-dev \
+        libxml2-dev \
+        zlib1g-dev \
+        libncurses5-dev \
+        libldap2-dev \
+        libicu-dev \
+        libmemcached-dev \
+        libcurl4-openssl-dev \
+        libssl-dev \
+        php-pear \
+        curl \
+        ssmtp \
+        mysql-client \
         git \
-        zip \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt mysqli pdo_mysql pcntl\
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
+        subversion \
+        wget && \
+    rm -rf /var/lib/apt/lists/* && \
+    wget https://getcomposer.org/download/1.2.4/composer.phar -O /usr/local/bin/composer && \
+    chmod a+rx /usr/local/bin/composer
 
-RUN pecl install -o -f redis \
-&&  rm -rf /tmp/pear \
-&&  docker-php-ext-enable redis
+RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
+    docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu && \
+    docker-php-ext-install ldap && \
+    docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
+    docker-php-ext-install pdo_mysql && \
+    docker-php-ext-configure mysql --with-mysql=mysqlnd && \
+    docker-php-ext-install mysql && \
+    docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
+    docker-php-ext-install mysqli && \
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/lib && \
+    docker-php-ext-install gd && \
+    docker-php-ext-install soap && \
+    docker-php-ext-install intl && \
+    docker-php-ext-install mcrypt && \
+    docker-php-ext-install gmp && \
+    docker-php-ext-install bcmath && \
+    docker-php-ext-install mbstring && \
+    docker-php-ext-install zip && \
+    docker-php-ext-install pcntl && \
+    docker-php-ext-install ftp && \
+    docker-php-ext-install sockets && \
+    pecl install mongo && \
+    pecl install memcached-2.2.0 && \
+    pecl install redis && \
+    pecl install xdebug-2.4.1
 
 COPY ./php.ini /usr/local/etc/php/conf.d/php.ini

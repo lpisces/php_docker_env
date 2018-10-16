@@ -2,118 +2,111 @@ version: '3'
 
 services:
 
-### Applications Code Container #############################
-
-    # web:
-    #   image: debian:jessie
-    #   volumes:
-    #     - ./www:/var/www
-
 ### PHP-FPM Container #######################################
 
-    php-fpm:
-      build:
-        context: ./php
-      volumes:
-        - ${WEB_ROOT}:/var/www/html
-      expose:
-        - "9000"
-      depends_on:
-        - mysql
-        - redis
-      restart: on-failure
+  php-fpm:
+    build:
+      context: ./php-fpm
+    volumes:
+      - ${WEB_ROOT}:/var/www/html
+    expose:
+      - "9000"
+    depends_on:
+      - mysql
+      - redis
+    restart: always
 
 ### PHP-CLI Container #######################################
 
-    php_cli:
-      build:
-        context: ./php_cli
-      volumes:
-        - ${WEB_ROOT}:/var/www/html
-      depends_on:
-        - mysql
-        - redis
-      tty: true
-      restart: on-failure
+  php-cli:
+    build:
+      context: ./php-cli
+    volumes:
+      - ${WEB_ROOT}:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+    tty: true
+    restart: always
 
-### PHP-CLI_CRONTAB Container #######################################
+### CRONTAB Container #######################################
 
-    php_cli_crontab:
-      build:
-        context: ./php_cli_crontab
-      volumes:
-        - ${WEB_ROOT}:/var/www/html
-      depends_on:
-        - mysql
-        - redis
-      tty: true
-      restart: on-failure
+  crontab:
+    build:
+      context: ./crontab
+    volumes:
+      - ${WEB_ROOT}:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+    tty: true
+    restart: always
 
-### PHP-CLI_WORKER Container #######################################
+### WORKER Container #######################################
 
-    php_cli_worker:
-      build:
-        context: ./php_cli_worker
-      volumes:
-        - ${WEB_ROOT}:/var/www/html
-      depends_on:
-        - mysql
-        - redis
-      tty: true
-      restart: on-failure
+  worker:
+    build:
+      context: ./worker
+    volumes:
+      - ${WEB_ROOT}:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+    tty: true
+    restart: always
 
 ### Nginx Server Container ##################################
 
-    nginx:
-      build:
-        context: ./nginx
-      volumes:
-          - ${WEB_ROOT}:/var/www/html
-      ports:
-          - "${NGINX_HTTP_PORT}:80"
-          - "${NGINX_HTTPS_PORT}:443"
-      depends_on:
-          - php-fpm
-      restart: on-failure
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+        - ${WEB_ROOT}:/var/www/html
+    ports:
+        - "${NGINX_HTTP_PORT}:80"
+        - "${NGINX_HTTPS_PORT}:443"
+    depends_on:
+        - php-fpm
+    restart: always
 
 ### MySQL Container #########################################
 
-    mysql:
-      image: mysql:5.7
-      volumes:
-          #- ../data/mysql:/var/lib/mysql
-          - mysql_data:/var/lib/mysql
-      expose:
-        - 3306
-#      ports:
-#        - "${MYSQL_PORT}:3306"
-      environment:
-        - MYSQL_ROOT_PASSWORD=123456
-      restart: on-failure
+  mysql:
+    image: mysql:5.7
+    volumes:
+        #- ../data/mysql:/var/lib/mysql
+        - mysql_data:/var/lib/mysql
+    expose:
+      - 3306
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    restart: always
 
 ### PHPMyAdmin Container #########################################
 
-    phpmyadmin:
-      image: phpmyadmin/phpmyadmin
-      ports:
-        - "${PHPMYADMIN_PORT}:80"
-      links:
-          - mysql:db
-      depends_on:
-        - mysql
-      restart: on-failure
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+    links:
+        - mysql:db
+    depends_on:
+      - mysql
+    restart: always
 
 ### Redis Container #########################################
 
-    redis:
-      image: redis:3.2.11
-      expose: 
-        - "6379"
-#      ports:
-#        - "${REDIS_PORT}:6379"
-      volumes:
-        - ../data/redis:/data
-      restart: on-failure
+  redis:
+    image: redis:3.2.11
+    expose: 
+      - "6379"
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - ../data/redis:/data
+    restart: always
 
 ### Volumes Setup ###########################################
 

@@ -83,7 +83,6 @@ def env(echo):
   startPort = getStartPort(startPortFile)
   services = ["NGINX_HTTP", "NGINX_HTTPS", "MYSQL", "PHPMYADMIN", "REDIS"]
   unusedPort = getUnusedPort(startPort, len(services))
-
   
   if len(myEnv) == 0:
     for i in range(len(services)):

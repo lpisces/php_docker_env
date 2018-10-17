@@ -15,7 +15,14 @@ def cli():
 @click.option('--echo', default=False, type=bool)
 @click.option('--sslcrt', default="", type=str)
 @click.option('--sslkey', default="", type=str)
-def nginx(https, template, port, server, echo, sslcrt, sslkey):
+@click.option('--output', default="", type=str)
+@click.option('--webroot', default="", type=str)
+def nginx(https, template, port, server, echo, sslcrt, sslkey, output, webroot):
+
+  if template == 'static' and webroot == "":
+    click.echo("webroot should be provided")
+    exit()
+
   if https:
     template += '_https'
     if port < 0:
@@ -28,10 +35,20 @@ def nginx(https, template, port, server, echo, sslcrt, sslkey):
   template_dir = './templates'
   template_path = "%s/%s.conf" % (template_dir, template)
 
-  fd = open(template_path)
-  conf = fd.read()
+  try:
+    fd = open(template_path)
+    conf = fd.read()
+    fd.close()
+  except:
+    click.echo("no such template")
+    exit()
 
-  conf = conf.replace("LOCAL_PORT", str(port))
+  if template.startswith("proxy"):
+    conf = conf.replace("LOCAL_PORT", str(port))
+  
+  if template.startswith("static"):
+    conf = conf.replace("WEB_ROOT", webroot)
+
   conf = conf.replace("SERVER1", " ".join(server))
   conf = conf.replace("SERVER2", server[0])
 
@@ -41,6 +58,11 @@ def nginx(https, template, port, server, echo, sslcrt, sslkey):
 
   if echo:
     click.echo(conf)
+
+  if output != "":
+    fd = open(output, "w")
+    fd.write(conf)
+    fd.close()
 
 @cli.command()
 def env():

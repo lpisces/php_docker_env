@@ -1,0 +1,50 @@
+#! /usr/bin/env python
+
+import click
+
+@click.group()
+def cli():
+  """ config tool for docker-compose projects"""
+  pass
+
+@cli.command()
+@click.option('--https', default=False, type=bool)
+@click.option('--template', '-t', default="proxy", type=str)
+@click.option('--port', '-p', default=-1, type=int)
+@click.option('--server', '-s', default="localhost", multiple=True)
+@click.option('--echo', default=False, type=bool)
+@click.option('--sslcrt', default="", type=str)
+@click.option('--sslkey', default="", type=str)
+def nginx(https, template, port, server, echo, sslcrt, sslkey):
+  if https:
+    template += '_https'
+    if port < 0:
+      port = 443
+  else:
+    template += '_http'
+    if port < 0:
+      port = 80
+
+  template_dir = './templates'
+  template_path = "%s/%s.conf" % (template_dir, template)
+
+  fd = open(template_path)
+  conf = fd.read()
+
+  conf = conf.replace("LOCAL_PORT", str(port))
+  conf = conf.replace("SERVER1", " ".join(server))
+  conf = conf.replace("SERVER2", server[0])
+
+  if https:
+    conf = conf.replace("SSL_CRT", sslcrt)
+    conf = conf.replace("SSL_KEY", sslkey)
+
+  if echo:
+    click.echo(conf)
+
+@cli.command()
+def env():
+  click.echo('Initialized the database')
+
+if __name__ == '__main__':
+  cli()

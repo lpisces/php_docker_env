@@ -127,6 +127,7 @@ def getUnusedPort(start, n):
     if False == isUsedPort(serverIP, port):
       unused.append(str(port))
     else:
+      port += 1
       return getUnusedPort(port, n)
   return unused
   
